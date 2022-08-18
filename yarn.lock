@@ -20334,16 +20334,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-parallax@npm:^3.5.1":
-  version: 3.5.1
-  resolution: "react-parallax@npm:3.5.1"
-  peerDependencies:
-    react: 16.x.x || 17.x.x || 18.x.x
-    react-dom: 16.x.x || 17.x.x || 18.x.x
-  checksum: 86d460d4d155166896139614ec46194a6584f90b8892791a9923098e2b1e3c39d33f333aa3571bd30ec2bc2a3db16a034659708aa16fbb82b551753477886284
-  languageName: node
-  linkType: hard
-
 "react-refresh@npm:0.14.0":
   version: 0.14.0
   resolution: "react-refresh@npm:0.14.0"
@@ -24141,7 +24131,6 @@ __metadata:
     prop-types: 15.8.1
     react: 17.0.2
     react-dom: 17.0.2
-    react-parallax: ^3.5.1
     react-type-animation: ^2.0.9
   languageName: unknown
   linkType: soft
