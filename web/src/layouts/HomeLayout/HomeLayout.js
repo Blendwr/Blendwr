@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react'
+// import { useEffect, useState } from 'react'
 
 import Code from 'pixelarticons/svg/code.svg'
 import Contact from 'pixelarticons/svg/contact.svg'
 import {
   AppBar,
   Button,
-  Fade,
-  Slide,
+  // Fade,
+  // Slide,
   Toolbar,
   Typography,
   Box,
@@ -14,10 +14,10 @@ import {
   Fab,
   Container,
 } from '@mui/material'
-import { Parallax } from 'react-parallax'
+// import { Parallax } from 'react-parallax'
 // import useScrolling from 'src/hooks/UseScrolling'
 
-import background from './background.gif'
+// import background from './background.gif'
 
 // const useMousePos = () => {
 //   const [xPos, setXPos] = useState(0)
@@ -74,12 +74,12 @@ const HomeLayout = ({ children }) => {
 
   return (
     <div>
-      <Parallax
+      {/* <Parallax
         bgImage={background}
         blur={10}
         bgImageAlt="background"
         strength={200}
-      >
+      > */}
         {/* <img
           src="https://terraria.wiki.gg/es/images/5/59/Wandering_Eye.gif"
           style={{
@@ -128,7 +128,7 @@ const HomeLayout = ({ children }) => {
             Contact
           </Fab>
         </Box>
-      </Parallax>
+      {/* </Parallax> */}
     </div>
   )
 }
