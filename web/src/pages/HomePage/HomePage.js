@@ -11,6 +11,7 @@ import {
   Stack,
   Typography,
   SvgIcon,
+  Container,
 } from '@mui/material'
 import { TypeAnimation } from 'react-type-animation'
 
@@ -27,69 +28,74 @@ const HomePage = () => {
   return (
     <>
       <MetaTags title="Home" description="Home page" />
-      <Grid container height="100vh">
-        <Grid
-          item
-          xs={12}
-          md={6}
-          lg={6}
-          display="flex"
-          justifyContent="center"
-          flexDirection="column"
-        >
-          <Slide direction="down" in={!scrolling} unmountOnExit>
-            <Typography variant="h3">ceeeeeesar</Typography>
-          </Slide>
-          <Typography variant="h4">
-            <TypeAnimation
-              sequence={[
-                "hi, i'm ceeeeeesar",
-                300,
-                "hi, i'm ceeeeeesar :D",
-              ]}
-              speed={70}
-              wrapper="span"
-              repeat={0}
-            />
-          </Typography>
-          <Stack spacing={1} direction="row" pt={4}>
-            <Button
-              variant="contained"
-              startIcon={<SvgIcon component={Contact} inheritViewBox />}
+      <Box bgcolor="rgba(0, 0, 0, 0.3)">
+        <Container>
+          <Grid container height="100vh">
+            <Grid
+              item
+              xs={12}
+              md={6}
+              lg={6}
+              display="flex"
+              justifyContent="center"
+              flexDirection="column"
             >
-              Contact
-            </Button>
-            <Button
-              variant="text"
-              startIcon={<SvgIcon component={Group} inheritViewBox />}
-              color="secondary"
-              onClick={() => moveScroll.moveTo(projectsSection)}
+              <Slide direction="down" in={!scrolling} unmountOnExit>
+                <Typography variant="h3">seokku</Typography>
+              </Slide>
+              <Typography variant="h4">
+                <TypeAnimation
+                  sequence={[
+                    "hi, i'm seokku",
+                    300,
+                    "hi, i'm seokku blendwr :D",
+                  ]}
+                  speed={70}
+                  wrapper="span"
+                  repeat={0}
+                />
+              </Typography>
+              <Stack spacing={1} direction="row" pt={4}>
+                <Button
+                  variant="contained"
+                  startIcon={<SvgIcon component={Contact} inheritViewBox />}
+                >
+                  Contact
+                </Button>
+                <Button
+                  variant="text"
+                  startIcon={<SvgIcon component={Group} inheritViewBox />}
+                  color="secondary"
+                  onClick={() => moveScroll.moveTo(projectsSection)}
+                >
+                  Projects
+                </Button>
+              </Stack>
+            </Grid>
+            <Grid
+              item
+              xs={6}
+              display={{ xs: 'none', lg: 'flex', md: 'flex' }}
+              justifyContent="center"
+              alignItems="center"
+              flexDirection="column"
             >
-              Projects
-            </Button>
-          </Stack>
-        </Grid>
-        <Grid
-          item
-          xs={6}
-          display={{ xs: 'none', lg: 'flex', md: 'flex' }}
-          justifyContent="center"
-          alignItems="center"
-          flexDirection="column"
-        >
-          <Avatar
-            // src="https://avatars.githubusercontent.com/u/106341703?v=4"
-            alt=""
-            sx={{ width: 150, height: 150 }}
-          />
-        </Grid>
-      </Grid>
-      <Box pt={8} />
-      <Typography variant="h3" ref={projectsSection}>
-        Projects :0
-      </Typography>
+              <Avatar
+                src="https://avatars.githubusercontent.com/u/106341703?v=4"
+                alt=""
+                sx={{ width: 150, height: 150 }}
+              />
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
+      <Container>
+        <Box pt={8} />
+        <Typography variant="h3" ref={projectsSection}>
+          Projects :0
+        </Typography>
 
-      {/* <Button
+        {/* <Button
             variant="text"
             startIcon={<SvgIcon component={Group} inheritViewBox />}
             color="secondary"
@@ -99,7 +105,8 @@ const HomePage = () => {
           >
             Projects
           </Button> */}
-      <Box height={500} />
+        <Box height={500} />
+      </Container>
     </>
   )
 }

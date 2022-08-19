@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 
 import Code from 'pixelarticons/svg/code.svg'
-import Contact from 'pixelarticons/svg/contact.svg'
 import {
   AppBar,
   Button,
@@ -11,116 +10,176 @@ import {
   Typography,
   Box,
   SvgIcon,
-  Fab,
-  Container,
 } from '@mui/material'
 import useScrolling from 'src/hooks/UseScrolling'
 
 // import background from './background.gif'
 
+const calcθ = (oldXPos, xPos, oldYPos, yPos) => {
+  const dx = oldXPos - xPos
+  const dy = oldYPos - yPos
+
+  const θ = Math.atan2(dy, dx)
+
+  return θ
+}
+
 const useMousePos = () => {
   const [xPos, setXPos] = useState(0)
   const [yPos, setYPos] = useState(0)
-  const [directionX, setDirectionX] = useState('left')
-  const [directionY, setDirectionY] = useState('top')
-  const [wanderingEyeDirection, setWanderingEyeDirection] = useState('0deg')
+  const [oldXPos, setOldXPos] = useState(0)
+  const [oldYPos, setOldYPos] = useState(0)
+  const [θ, setθ] = useState(0)
 
   useEffect(() => {
-    const changeWanderingEyeDirection = () => {
-      if (directionX == 'left' && directionY == 'top') {
-        setWanderingEyeDirection('45deg')
-      } else if (directionX == 'right' && directionY == 'top') {
-        setWanderingEyeDirection('135deg')
-      } else if (directionX == 'left' && directionY == 'bottom') {
-        setWanderingEyeDirection('-45deg')
-      } else if (directionX == 'right' && directionY == 'bottom') {
-        setWanderingEyeDirection('-135deg')
-      }
-    }
-
     const handleMove = (evt) => {
       const [oldX, oldY] = [xPos, yPos]
       const { clientX, clientY } = evt
 
-      if (oldX > clientX) {
-        setDirectionX('left')
-      } else {
-        setDirectionX('right')
-      }
+      setθ(calcθ(oldXPos, xPos, oldYPos, yPos))
 
-      if (oldY > clientY) {
-        setDirectionY('top')
-      } else {
-        setDirectionY('bottom')
-      }
+      setTimeout(() => {
+        setXPos(clientX)
+        setYPos(clientY)
 
-      setXPos(clientX)
-      setYPos(clientY)
-      changeWanderingEyeDirection()
+        setOldXPos(oldX)
+        setOldYPos(oldY)
+      }, 50)
     }
 
     window.addEventListener('mousemove', handleMove)
 
     return () => window.removeEventListener('mousemove', handleMove)
-  }, [xPos, yPos, directionX, directionY])
+  }, [xPos, yPos, oldXPos, oldYPos])
 
-  return { xPos, yPos, directionX, directionY, wanderingEyeDirection }
+  return { xPos, yPos, oldXPos, oldYPos, θ }
+}
+
+const genRandom = (min, max) => {
+  const difference = max - min
+
+  let rand = Math.random()
+
+  rand = Math.floor(rand * difference)
+  rand += min
+
+  return rand
+}
+
+const useRandom = () => {
+  const [xPos, setXPos] = useState(0)
+  const [yPos, setYPos] = useState(0)
+  const [oldXPos, setOldXPos] = useState(0)
+  const [oldYPos, setOldYPos] = useState(0)
+  const [θ, setθ] = useState(0)
+
+  const maxHeight = window.innerHeight
+  const maxWidth = window.innerWidth
+  const speed = 1.5
+  const movingSpeed = 300
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      let [rx, ry] = [genRandom(-movingSpeed, movingSpeed), genRandom(-movingSpeed, movingSpeed)]
+      let nx = xPos + rx
+      let ny = yPos + ry
+
+      if (nx > maxWidth && nx !== 0) {
+        nx = xPos - rx
+      } else if (ny > maxHeight && ny !== 0) {
+        ny = yPos - ry
+      }
+
+      if (nx < 0) {
+        nx = xPos + genRandom(0, movingSpeed)
+      } else if (ny < 0) {
+        ny = yPos + genRandom(0, movingSpeed)
+      }
+
+      setθ(calcθ(xPos, nx, oldYPos, ny))
+
+      setOldXPos(xPos)
+      setOldYPos(yPos)
+
+      setXPos(nx)
+      setYPos(ny)
+    }, speed * 1000)
+
+    return () => clearInterval(interval)
+  }, [xPos, yPos])
+
+  return {
+    xPos,
+    yPos,
+    oldXPos,
+    oldYPos,
+    θ,
+  }
 }
 
 const HomeLayout = ({ children }) => {
   const scrolling = useScrolling()
   const mousePos = useMousePos()
+  const random = useRandom()
 
   return (
     <div>
+      <Box display={{ xs: 'block', lg: 'none', md: 'none' }}>
         <img
           src="https://terraria.wiki.gg/es/images/5/59/Wandering_Eye.gif"
           style={{
-            transition: 'all ease 1s',
+            transition: 'left ease-in-out 1.5s, top ease-in-out 1.5s, transform ease-in-out .2s',
             position: 'fixed',
-            left: mousePos.xPos,
-            top: mousePos.yPos,
-            transform: `rotate(${mousePos.wanderingEyeDirection})`,
-            zIndex: 'inherit',
+            left: random.xPos,
+            top: random.yPos,
+            transform: `rotate(${random.θ}rad)`,
+            zIndex: '-100',
           }}
           alt="ojo"
         />
-        <Box>
-          <AppBar
-            elevation={0}
-            position="fixed"
-            color={'transparent'}
-            sx={{ backdropFilter: 'blur(20px)' }}
-          >
-            <Toolbar>
-              <Slide direction="down" in={scrolling} unmountOnExit>
-                <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
-                  ceeeeeesar
-                </Typography>
-              </Slide>
-              <Fade in={scrolling} unmountOnExit>
-                <Button
-                  color="secondary"
-                  component="a"
-                  href="http://github.com/Blendwr"
-                  target="_blank"
-                  startIcon={<SvgIcon component={Code} inheritViewBox />}
-                >
-                  GitHub
-                </Button>
-              </Fade>
-            </Toolbar>
-          </AppBar>
-          <Container>{children}</Container>
-          <Fab
-            variant="extended"
-            color="primary"
-            sx={{ position: 'fixed', bottom: 10, right: 10 }}
-          >
-            <SvgIcon component={Contact} inheritViewBox sx={{ mr: 1 }} />
-            Contact
-          </Fab>
-        </Box>
+      </Box>
+      <Box display={{ xs: 'none', lg: 'block', md: 'block' }}>
+        <img
+          src="https://terraria.wiki.gg/es/images/5/59/Wandering_Eye.gif"
+          style={{
+            transition: 'left ease-in-out .1s, top ease-in-out .1s',
+            position: 'fixed',
+            left: mousePos.xPos,
+            top: mousePos.yPos,
+            transform: `rotate(${mousePos.θ}rad)`,
+            zIndex: '-100',
+          }}
+          alt="ojo"
+        />
+      </Box>
+      <Box>
+        <AppBar
+          elevation={0}
+          position="fixed"
+          color={'transparent'}
+          sx={{ backdropFilter: 'blur(20px)' }}
+        >
+          <Toolbar>
+            <Slide direction="down" in={scrolling} unmountOnExit>
+              <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
+                seokku
+              </Typography>
+            </Slide>
+            <Fade in={scrolling} unmountOnExit>
+              <Button
+                color="secondary"
+                component="a"
+                href="http://github.com/Blendwr"
+                target="_blank"
+                startIcon={<SvgIcon component={Code} inheritViewBox />}
+              >
+                GitHub
+              </Button>
+            </Fade>
+          </Toolbar>
+        </AppBar>
+        {children}
+      </Box>
     </div>
   )
 }
