@@ -12,110 +12,11 @@ import {
   SvgIcon,
 } from '@mui/material'
 import useScrolling from 'src/hooks/UseScrolling'
+import useMousePos from 'src/hooks/UseMousePos'
+import useRandom from 'src/hooks/UseRandom'
+import WithSplashScreen from 'src/hooks/WithSplashScreen'
 
 // import background from './background.gif'
-
-const calcθ = (oldXPos, xPos, oldYPos, yPos) => {
-  const dx = oldXPos - xPos
-  const dy = oldYPos - yPos
-
-  const θ = Math.atan2(dy, dx)
-
-  return θ
-}
-
-const useMousePos = () => {
-  const [xPos, setXPos] = useState(0)
-  const [yPos, setYPos] = useState(0)
-  const [oldXPos, setOldXPos] = useState(0)
-  const [oldYPos, setOldYPos] = useState(0)
-  const [θ, setθ] = useState(0)
-
-  useEffect(() => {
-    const handleMove = (evt) => {
-      const [oldX, oldY] = [xPos, yPos]
-      const { clientX, clientY } = evt
-
-      setθ(calcθ(oldXPos, xPos, oldYPos, yPos))
-
-      setTimeout(() => {
-        setXPos(clientX)
-        setYPos(clientY)
-
-        setOldXPos(oldX)
-        setOldYPos(oldY)
-      }, 50)
-    }
-
-    window.addEventListener('mousemove', handleMove)
-
-    return () => window.removeEventListener('mousemove', handleMove)
-  }, [xPos, yPos, oldXPos, oldYPos])
-
-  return { xPos, yPos, oldXPos, oldYPos, θ }
-}
-
-const genRandom = (min, max) => {
-  const difference = max - min
-
-  let rand = Math.random()
-
-  rand = Math.floor(rand * difference)
-  rand += min
-
-  return rand
-}
-
-const useRandom = () => {
-  const [xPos, setXPos] = useState(0)
-  const [yPos, setYPos] = useState(0)
-  const [oldXPos, setOldXPos] = useState(0)
-  const [oldYPos, setOldYPos] = useState(0)
-  const [θ, setθ] = useState(0)
-
-  const maxHeight = window.innerHeight
-  const maxWidth = window.innerWidth
-  const speed = 1.5
-  const movingSpeed = 300
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      let [rx, ry] = [genRandom(-movingSpeed, movingSpeed), genRandom(-movingSpeed, movingSpeed)]
-      let nx = xPos + rx
-      let ny = yPos + ry
-
-      if (nx > maxWidth && nx !== 0) {
-        nx = xPos - rx
-      } else if (ny > maxHeight && ny !== 0) {
-        ny = yPos - ry
-      }
-
-      if (nx < 0) {
-        nx = xPos + genRandom(0, movingSpeed)
-      } else if (ny < 0) {
-        ny = yPos + genRandom(0, movingSpeed)
-      }
-
-      setθ(calcθ(xPos, nx, oldYPos, ny))
-
-      setOldXPos(xPos)
-      setOldYPos(yPos)
-
-      setXPos(nx)
-      setYPos(ny)
-    }, speed * 1000)
-
-    return () => clearInterval(interval)
-  }, [xPos, yPos])
-
-  return {
-    xPos,
-    yPos,
-    oldXPos,
-    oldYPos,
-    θ,
-  }
-}
 
 const HomeLayout = ({ children }) => {
   const scrolling = useScrolling()
@@ -123,7 +24,7 @@ const HomeLayout = ({ children }) => {
   const random = useRandom()
 
   return (
-    <div>
+    <WithSplashScreen>
       <Box display={{ xs: 'block', lg: 'none', md: 'none' }}>
         <img
           src="https://terraria.wiki.gg/es/images/5/59/Wandering_Eye.gif"
@@ -180,7 +81,7 @@ const HomeLayout = ({ children }) => {
         </AppBar>
         {children}
       </Box>
-    </div>
+    </WithSplashScreen>
   )
 }
 

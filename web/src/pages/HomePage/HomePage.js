@@ -18,6 +18,7 @@ import { TypeAnimation } from 'react-type-animation'
 import { MetaTags } from '@redwoodjs/web'
 import useScrolling from 'src/hooks/UseScrolling'
 import useMoveScroll from 'src/hooks/MoveScroll'
+import { routes, Link } from '@redwoodjs/router'
 
 const HomePage = () => {
   const projectsSection = useRef()
@@ -105,6 +106,7 @@ const HomePage = () => {
           >
             Projects
           </Button> */}
+          <Link to={routes.projects()}>Projects</Link>
         <Box height={500} />
       </Container>
     </>
