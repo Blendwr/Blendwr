@@ -13,7 +13,7 @@ import HomeLayout from './layouts/HomeLayout/HomeLayout'
 const Routes = () => {
   return (
     <Router>
-      <Set wrap={HomeLayout} prerender>
+      <Set wrap={HomeLayout}>
         <Route path="/projects" page={ProjectsPage} name="projects" />
         <Route path="/" page={HomePage} name="home" />
       </Set>
